@@ -2,12 +2,23 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import time
+import spacy
+
+nlp = spacy.load('en_core_web_md')
 
 # todo "the" band names?
 def transform_name(string):
     result = string.lower().replace(" ", "-")
     return result
 
+def transform_answer(string):
+    if string == 'y' or string == 'yes':
+        answer = 1
+    elif string == 'n' or string == 'no':
+        answer = 0
+    else:
+        answer = None
+    return answer
 
 def get_lyricspages(artist):
     pages = []
@@ -73,3 +84,11 @@ def get_lyrics(url):
         return title, artist, lyrics
     else:
         pass
+
+def clean_text(review, model):
+    new_doc = ''
+    doc = model(review)
+    for word in doc:
+        if not word.is_stop and word.is_alpha:
+            new_doc = f'{new_doc} {word.lemma_.lower()}'
+    return new_doc
