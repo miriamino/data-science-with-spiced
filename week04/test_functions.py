@@ -1,15 +1,15 @@
 from helper_functions import transform_name, get_lyricspages, get_urls, get_lyrics, transform_answer
 
-# # transform_name
+# transform_name
 
-# def test_uppercase():
-#     assert transform_name('Mariah Carey') == 'mariah-carey'
+def test_uppercase():
+    assert transform_name('Mariah Carey') == 'mariah-carey'
 
-# def test_lowercase():
-#     assert transform_name('mariah carey') == 'mariah-carey'
+def test_lowercase():
+    assert transform_name('mariah carey') == 'mariah-carey'
 
-# def test_single_word():
-#     assert transform_name('lizzo') == 'lizzo'
+def test_single_word():
+    assert transform_name('lizzo') == 'lizzo'
 
 # transform_answer
 def test_y():
@@ -28,7 +28,7 @@ def test_bla():
 # # get_lyricspages
 
 # def test_valid_name():
-#     assert get_lyricspages('princess nokia') == ['https://www.metrolyrics.com/mariah-carey-alpage-1.html']
+#     assert get_lyricspages('princess nokia') == ['https://www.metrolyrics.com/princess-nokia-alpage-1.html']
 
 # def test_invalid_name():
 #     assert get_lyricspages('somethingsnotright') == None

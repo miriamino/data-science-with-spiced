@@ -1,0 +1,21 @@
+CREATE TABLE employees (employeeID SERIAL PRIMARY KEY, lastName VARCHAR(50), firstName VARCHAR(50), title VARCHAR(50), titleOfCourtesy VARCHAR(5), birthDate TIMESTAMP, hireDate TIMESTAMP, address VARCHAR(255), city VARCHAR(50), region VARCHAR(5), postalCode VARCHAR(20), country VARCHAR(50), homePhone VARCHAR(50), extension SMALLINT, photo BYTEA, notes TEXT, reportsTo INT REFERENCES employees(employeeID), photoPath VARCHAR(255));
+
+CREATE TABLE regions (regionID SERIAL PRIMARY KEY, regionName VARCHAR(50)); 
+
+CREATE TABLE territories (territoryID SERIAL PRIMARY KEY, territoryDescription VARCHAR(50), regionID INT REFERENCES regions(regionID));
+
+CREATE TABLE employee_territories (employeeID INT REFERENCES employees(employeeId), territoryID INT REFERENCES territories(territoryID));
+
+CREATE TABLE customers (customerID VARCHAR(5) PRIMARY KEY, companyName VARCHAR(255), contactName VARCHAR(255), contactTitle VARCHAR(255), address VARCHAR(255), city VARCHAR(50), region VARCHAR(50), postalCode VARCHAR(50), country VARCHAR(50), phone VARCHAR(50), fax VARCHAR(50));
+
+CREATE TABLE categories (categoryID SERIAL PRIMARY KEY, categoryName VARCHAR(50), description TEXT, picture BYTEA);
+
+CREATE TABLE shippers (shipperID SERIAL PRIMARY KEY, companyName VARCHAR(255), phone VARCHAR(50));
+
+CREATE TABLE suppliers (supplierID SERIAL PRIMARY KEY, companyName VARCHAR(255), contactName VARCHAR(255), contactTitle VARCHAR(255), address VARCHAR(255), city VARCHAR(50), region VARCHAR(50), postalCode VARCHAR(50), country VARCHAR(50), phone VARCHAR(50), fax VARCHAR(50), homePage VARCHAR(255));
+
+CREATE TABLE orders (orderID SERIAL PRIMARY KEY, customerID CHAR(5) REFERENCES customers(customerID), employeeID INT REFERENCES employees(employeeId), orderDate TIMESTAMP, requiredDate TIMESTAMP, shippedDate TIMESTAMP, shipVia INT REFERENCES shippers(shipperID), freight FLOAT4, shipName VARCHAR(50), shipAddress VARCHAR(255), shipCity VARCHAR(50), shipRegion VARCHAR(50), shipPostalCode VARCHAR(50), shipCountry VARCHAR(50));
+
+CREATE TABLE products(productID SERIAL PRIMARY KEY, productName VARCHAR(50), supplierID INT REFERENCES suppliers(supplierID), categoryID INT REFERENCES categories(categoryID), quantityPerUnit VARCHAR(50), unitPrice FLOAT4, unitsInStock SMALLINT, unitsOnOrder SMALLINT, reorderLevel SMALLINT, discontinued BOOL);
+
+CREATE TABLE order_details (orderID INT REFERENCES orders(orderID), productID INT REFERENCES products(productID), unitPrice FLOAT4, quantity SMALLINT, discount FLOAT4);
