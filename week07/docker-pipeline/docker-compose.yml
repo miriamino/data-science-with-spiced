@@ -1,0 +1,28 @@
+version: '3'
+services:
+  tweet_container:
+    build: tweet_collector/
+    volumes:
+    - ./tweet_collector/:/app
+    depends_on:
+    - mongodb_container
+  mongodb_container:
+    image: mongo
+    volumes:
+    - ./docker-pipeline/:/data/db
+    ports:
+    - 27017:27017
+  etl_container:
+    build: etl_job
+    volumes:
+    - ./etl_job/:/app
+    depends_on:
+    - mongodb_container
+    - postgres_container
+  postgres_container:
+    image: postgres:13.0
+    ports:
+    - 5555:5432
+    environment:
+    - POSTGRES_USER=${POSTGRES_USER}
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
