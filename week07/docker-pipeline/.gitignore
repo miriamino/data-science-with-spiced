@@ -2,4 +2,3 @@
 tweet_collector/.env
 etl_job/.env
 docker-pipeline/
-

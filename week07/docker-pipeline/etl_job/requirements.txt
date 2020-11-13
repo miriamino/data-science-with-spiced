@@ -1,4 +1,4 @@
-python-dotenv
 pymongo
 SQLAlchemy
 psycopg2-binary
+vaderSentiment

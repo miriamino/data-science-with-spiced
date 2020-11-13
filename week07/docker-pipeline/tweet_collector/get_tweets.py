@@ -6,11 +6,6 @@ import json
 import logging
 import pymongo
 
-from dotenv import load_dotenv
-
-env_path = Path('.') / '.env'
-load_dotenv()
-
 client = pymongo.MongoClient(host='mongodb_container', port=27017)
 db = client.twitterdb
 collection = db.tweets
@@ -41,15 +36,24 @@ class TwitterListener(StreamListener):
 
         t = json.loads(data) #t is just a regular python dictionary.
 
+        # handling extended tweets
+        text = t['text']
+        if 'extended_tweet' in t:
+            text = t['extended_tweet']['full_text']
+        if 'retweeted_status' in t:
+            r = t['retweeted_status']
+            if 'extended_tweet' in r:
+                text = r['extended_tweet']['full_text']
+
         tweet = {
-        'text': t['text'],
+        'text': text,
         'username': t['user']['screen_name'],
         'followers_count': t['user']['followers_count']
         }
 
-        logging.critical(f'\n\n\nTWEET INCOMING: {tweet["text"]}\n\n\n')
+        # logging.critical(f'\n\n\nTWEET INCOMING\n\n\n')
         collection.insert_one(tweet)
-        logging.critical(f'\n\n\nTWEET SAVED TO MONGODB: {tweet["text"]}\n\n\n')
+        # logging.critical(f'\n\n\nTWEET SAVED TO MONGODB: {tweet["text"]}\n\n\n')
 
 
     def on_error(self, status):
@@ -65,4 +69,4 @@ if __name__ == '__main__':
     auth = authenticate()
     listener = TwitterListener()
     stream = Stream(auth, listener)
-    stream.filter(track=['berlin'], languages=['en'])
+    stream.filter(track=['feminist'], languages=['en'])
